@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Myo Reaction Test</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/jumbotron-narrow.css" rel="stylesheet">
+    <link href="css/sticky-footer.css" rel="stylesheet">
+    <link href="css/reaction.css" rel="stylesheet">
+
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js'></script>
+    <script src='./myo.js'></script>
+    <script src='./experimental/myo.experimental.js'></script>
+    <script src="timbre.js"></script>   
+    <script src="flocking/flocking-all.js"></script>
+    <script src="myStuff.js"></script>
+  </head>
+  <body>      
+    <div class="container">
+        <div class="header">
+          <ul class="nav nav-pills pull-right">
+            <li><a href="index_1tone.html">Instrument</a></li>
+            <li class="active"><a href="#">React</a></li>
+            <li><a href="rps.html">Rock, Paper, Scissor</a></li>
+          </ul>
+          <h3 class="text-muted">Myo Connect</h3>
+        </div>
+        <div class="row centered">
+          <div class="col-md-8"><img id='image' src="ui/img/default.png"></img></div>
+          <div class="col-md-4">
+            <button type="button" class="btn btn-success btn-lg" onClick="startGame()" style="width: 125px">Begin!</button><br><br>
+
+            <pre>Status: <font id='wait'>Begin</font></pre>
+
+            <pre id="time">00:00:0000</pre>
+
+            <pre id="avg">00:00:0000</pre>
+
+            <button type="button" class="btn btn-default btn-lg" onClick="endGame()" style="width: 125px">End</button><br><br>
+          </div>
+        </div>
+    </div>
+  </body>
+
+  <script>
+    var startTime;
+    var myo = Myo.create(0);
+    var firstTime = true;
+    var counter = 0;
+    var total = 0;
+    img = new Array();
+    img[1]=new Image(); img[1].src="ui/img/wave_right.png";
+    img[2]=new Image(); img[2].src="ui/img/wave_left.png";
+    img[3]=new Image(); img[3].src="ui/img/unlock.png";
+    img[4]=new Image(); img[4].src="ui/img/spread.png";
+    img[5]=new Image(); img[5].src="ui/img/fist.png";
+    img[6]=new Image(); img[6].src="ui/img/empty.png";
+
+    function startGame(){
+        counter++;
+        startTime = new Date();
+        firstTime = true;
+        changeImage();
+        document.getElementById("wait").innerHTML = "Wait..";
+    }
+
+    function endGame(){
+        if(firstTime){
+            outputTime();
+            document.getElementById("wait").innerHTML = "Done";
+            firstTime = false;
+        }
+    }
+
+
+
+    function changeImage(){
+        document.getElementById("time").innerHTML = "00:00:0000";
+        var time = Math.random() * 10;
+        var image = Math.floor(Math.random() * 4) + 1;
+        document.getElementById("image").src=img[6].src;
+        setTimeout(function(){
+            document.getElementById("image").src=img[image].src;
+            startTime = new Date();
+        },3000);
+
+        myo.on('wave_right', function(){
+          if(image == 1){
+            endGame();
+          }
+        })
+
+        myo.on('wave_left', function(){
+          if(image == 2){
+            endGame();
+          }
+        })
+
+        myo.on('thumb_to_pinky', function(){
+          if(image == 3){
+            endGame();
+          }
+        })
+
+        myo.on('fingers_spread', function(){
+          if(image == 4){
+            endGame();
+          }
+        })
+
+        myo.on('fist', function(){
+          if(image == 5){
+            endGame();
+          }
+        })
+    }
+
+    function outputTime(){
+        var endTime = new Date();
+        var totalTime = (endTime - startTime);
+        total = total + totalTime;
+        //var formattedTime = totalTime.format("dd/MM/yyyy HH:mm:ss sss");
+        var formattedTime = msToTime(totalTime);
+        var formattedTotal = (total) / counter;
+        document.getElementById("time").innerHTML = formattedTime;
+        document.getElementById("avg").innerHTML = msToTime(Math.round(formattedTotal));
+    }
+
+    function msToTime(s) {
+      var ms = s % 1000;
+      s = (s - ms) / 1000;
+      var secs = s % 60;
+      s = (s - secs) / 60;
+      var mins = s % 60;
+      var hrs = (s - mins) / 60;
+
+      if(secs < 10)
+      {
+        secs = "" + 0 + secs;
+      }
+
+      if(mins < 10)
+      {
+        mins = "" + 0 + mins;
+      }
+      return mins + ':' + secs + ':' + ms;
+    }
+
+  </script>
+  </html>

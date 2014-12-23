@@ -1,0 +1,39 @@
+body{
+	background-color: #00BBDE;
+}
+.bar{
+	height: 40px;
+	width: 33.33333%;
+	float: left;
+	text-align: center;
+	font-size: 35px;
+	color: #00BBDE;
+}
+.score{
+	color: white;
+	position: absolute;
+	top: 75px;
+	font-size: 75px;
+	text-align: center;
+	width: 255px;
+}
+.avatar{
+	position: absolute;
+	width: 255px;
+	height: 255px;
+	top: 0px;
+}
+#player,  #cpu {
+	width: 255px;
+	float: left;
+}
+#vs{
+	text-align: center;
+	margin-top: 75px;
+	width: 200px;
+	float:left;
+}
+.avatar img {
+	margin-top: 128px;
+	margin-left: 128px;
+}

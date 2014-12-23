@@ -1,0 +1,76 @@
+		#log{
+			height : 50px;
+			width : 50px;
+			background-color: red;
+		}
+
+		#x{
+			height : 50px;
+			width : 50px;
+			background-color: yellow;
+		}
+
+		#y{
+			height : 50px;
+			width : 50px;
+			background-color: green;
+		}
+
+		#z{
+			height : 50px;
+			width : 50px;
+			background-color: blue;
+		}
+
+		#w{
+			height : 50px;
+			width : 50px;
+			background-color: black;
+		}
+
+		.meter { 
+			height: 20px;  /* Can be anything */
+			position: relative;
+			background: #555;
+			-moz-border-radius: 25px;
+			-webkit-border-radius: 25px;
+			border-radius: 25px;
+			padding: 10px;
+			-webkit-box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);
+			-moz-box-shadow   : inset 0 -1px 1px rgba(255,255,255,0.3);
+			box-shadow        : inset 0 -1px 1px rgba(255,255,255,0.3);
+		}
+
+		.orange {
+			background-color: #f1a165;
+			background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #f1a165),color-stop(1, #f36d0a));
+			background-image: -webkit-linear-gradient(top, #f1a165, #f36d0a); 
+		        background-image: -moz-linear-gradient(top, #f1a165, #f36d0a);
+		        background-image: -ms-linear-gradient(top, #f1a165, #f36d0a);
+		        background-image: -o-linear-gradient(top, #f1a165, #f36d0a);
+		}
+
+		.red {
+			background-color: #f0a3a3;
+			background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #f0a3a3),color-stop(1, #f42323));
+			background-image: -webkit-linear-gradient(top, #f0a3a3, #f42323);
+		        background-image: -moz-linear-gradient(top, #f0a3a3, #f42323);
+		        background-image: -ms-linear-gradient(top, #f0a3a3, #f42323);
+		        background-image: -o-linear-gradient(top, #f0a3a3, #f42323);
+		}
+
+		.green {
+			background-color: #f0f0f0;
+			background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #f0a3a3),color-stop(1, #f42323));
+			background-image: -webkit-linear-gradient(top, #f0f0f0, #a98383);
+		        background-image: -moz-linear-gradient(top, #f0f0f0, #a98383);
+		        background-image: -ms-linear-gradient(top, #f0f0f0, #a98383);
+		        background-image: -o-linear-gradient(top, #f0f0f0, #a98383);
+		}
+
+		#jumbo {
+		  padding-top: 2px;
+		  padding-bottom: 4px;
+		  padding-left: 30px;
+		  padding-right: 30px;
+		}

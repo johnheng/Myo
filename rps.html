@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+		<script src='http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js'></script>
+		<script src='./myo.js'></script>
+		<script src='./experimental/myo.experimental.js'></script>
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/sticky-footer.css" rel="stylesheet">
+		<link href="css/style2.css" rel="stylesheet">
+	</head>
+	<body>
+	<div class="container">
+		<div class="header" style="width:700px; margin: 0 auto; margin-bottom:50px;">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="index_1tone.html">Instrument</a></li>
+          <li><a href="reaction.html">React</a></li>
+          <li class="active"><a href="rps.html">Rock, Paper, Scissor</a></li>
+        </ul>
+        <h3 class="text-muted">Myo Connect</h3>
+      </div>
+		<!-- <div><h1>Myo Rock-Paper-scissors</h1></div> -->
+		<div class="jumbotron" style="background-color:#006679; color:white;">
+			<div class="row">
+				<span class="center-block" style="width: 260px;"><h1 style="float:left;">Myo </h1><img src="images/rpslogo.png" style="margin-top: 20px; height:75px;"></span>
+			</div>
+			<div class="row">
+				<div class="col-md-10 col-md-offset-1">
+					<div class="center-block" style="width: 710px">
+						<div style="width:255px; text-align:center; float:left;">
+							<h1>Player</h1>
+						</div>
+						<span style="width:200px; float:left; visibility:hidden;">vs.</span>
+						<div style="width:255px; text-align:center; float:left;">
+							<h1>Computer</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-10 col-md-offset-1">
+					<div class="center-block" style="width: 710px">
+						<div id="player">
+							<img src="images/ring.png" class="center-block">
+							<div id="wins" class="score">0</div>
+							<div class="avatar">
+							<img src="images/rock.png" id="myrock">
+							</div>
+							<div class="avatar">
+							<img src="images/paper.png" id="mypaper">
+							</div>
+							<div class="avatar">
+							<img src="images/scissors.png" id="myscissors">
+							</div>
+						</div>
+						<div id="vs"><h1>VS</h2></div>
+						<div id="cpu">
+							<img src="images/ring.png" class="center-block">
+							<div id="losses" class="score">0</div>
+							<div class="avatar">
+							<img src="images/rock.png" id="cpurock">
+							</div>
+							<div class="avatar">
+							<img src="images/paper.png" id="cpupaper">
+							</div>
+							<div class="avatar">
+							<img src="images/scissors.png" id="cpuscissors">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</body>
+
+	<style>
+	</style>
+
+
+	<script>
+		var myo = Myo.create(0);
+		var t = 200;
+		var wins = 0;
+		var losses = 0;
+		var currentplayer;
+		var currentcpu;
+		var gameinprogress;
+		$('#myrock').width(0).height(0);
+		$('#mypaper').width(0).height(0);
+		$('#myscissors').width(0).height(0);
+		$('#cpurock').width(0).height(0);
+		$('#cpupaper').width(0).height(0);
+		$('#cpuscissors').width(0).height(0);
+		function cpuGo(){
+			var choice = "rock";
+			switch(Math.floor(Math.random()*3)){
+				case 1:
+					choice = "paper";
+					break;
+				case 2:
+					choice = "scissors";
+					break;
+			}
+			return choice;
+		}
+		function hide(selector, time){
+			if(!time)
+				time = 200;
+			$(selector).animate({
+				height: [0, "swing"],
+				width: [0, "swing"],
+				marginTop: [128, "swing"],
+				marginLeft: [128, "swing"],
+			}, 
+			time);
+		}
+		function show(selector, size, time){
+			console.log(selector);
+			if(!time)
+				time = 200;
+			if(!size)
+				size = 255;
+			$(selector).animate({
+				height: [size, "swing"],
+				width: [size, "swing"],
+				marginTop: [0, "swing"],
+				marginLeft: [0, "swing"],
+			}, 
+			time);
+		}
+		function whoWins(player, cpu){
+			show("#my"+player);
+			show("#cpu"+cpu);
+			currentplayer = player;
+			currentcpu = cpu;
+			if(player === cpu){
+				return "tie";
+			}
+			if(player === 'rock'){
+				if(cpu === 'scissors')
+					return 'player';
+				return 'cpu';
+			}
+			if(player === 'paper'){
+				if(cpu === 'rock')
+					return 'player';
+				return 'cpu';
+			}
+			if(player === 'scissors'){
+				if(cpu === 'paper')
+					return 'player';
+				return 'cpu';
+			}
+		}
+		function game(pchoice){
+			gameinprogress = true;
+			var winner = whoWins(pchoice, cpuGo());
+			if(winner === "player")
+				wins++;
+			if(winner === "cpu")
+				losses++;
+			var timeout1 = window.setTimeout('$("#wins").html(wins);$("#losses").html(losses);',100);
+			var timeout2 = window.setTimeout('hide("#cpu" + currentcpu); hide("#my" + currentplayer); gameinprogress = false;', 600);
+			return;
+		}
+		myo.on('pose', function(poseName){
+			//console.log(poseName);
+		})
+
+		myo.on('arm_recognized', function(){
+			console.log('good!', this.id);
+		})
+
+		myo.on('arm_lost', function(){
+			console.log('bad', this.id);
+		})
+
+
+		myo.on('wave_left', function(){
+			console.log('wave Left!');
+		})
+
+		myo.on('wave_right', function(){
+			console.log('wave Right!');
+		})
+		
+		myo.on('rest', function(){
+			
+		})
+
+		myo.on('fist', function(edge){
+			myo.timer(edge, t, function(){
+				if(!gameinprogress)
+					game('rock');
+			})
+		})
+		
+		myo.on('fingers_spread', function(edge){
+			myo.timer(edge, t, function(){
+				if(!gameinprogress)
+					game('paper');
+			})
+		})
+		
+		myo.on('thumb_to_pinky', function(edge){
+			myo.timer(edge, t, function(){
+				if(!gameinprogress)
+					game('scissors');
+			})
+		})
+
+		myo.on('connected', function(){
+			setInterval(function(){
+				myo.requestBluetoothStrength();
+			}, 100);
+		})
+
+		myo.on('bluetooth_strength', function(BTS){
+		})
+	</script>
+</html>
